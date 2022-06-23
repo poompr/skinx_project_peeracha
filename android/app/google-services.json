@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "626337229690",
+    "project_id": "skinx-peeracha",
+    "storage_bucket": "skinx-peeracha.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:626337229690:android:ce087af996c5a7c74304c3",
+        "android_client_info": {
+          "package_name": "com.example.skinxproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "626337229690-kru04uncefcsajot8p9jo4jvh79p0nt6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.skinxproject",
+            "certificate_hash": "d7a8a071d9101b03424a591111b9e92d32479ac6"
+          }
+        },
+        {
+          "client_id": "626337229690-o8rb8p3t6b4r31a4vletv8oh67g2ffu9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByiGSSjDAAzzzTotfU6QguMc1tAEq529s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "626337229690-o8rb8p3t6b4r31a4vletv8oh67g2ffu9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

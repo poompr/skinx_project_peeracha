@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>626337229690-0qrfn8i1u1irp5td049apcj29a85pgak.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.626337229690-0qrfn8i1u1irp5td049apcj29a85pgak</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>626337229690-kru04uncefcsajot8p9jo4jvh79p0nt6.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDwtz7Txfhm09bv8fJJ5odNFvU5o1VCIBE</string>
+	<key>GCM_SENDER_ID</key>
+	<string>626337229690</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.skinxproject</string>
+	<key>PROJECT_ID</key>
+	<string>skinx-peeracha</string>
+	<key>STORAGE_BUCKET</key>
+	<string>skinx-peeracha.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:626337229690:ios:6a4cb5a2021341764304c3</string>
+</dict>
+</plist>
