@@ -29,7 +29,10 @@ class Tapuserlistwidget extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: TextSwhitewidget(name: usernameIndex, size: 20),
+          title: Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: TextSwhitewidget(name: usernameIndex, size: 20),
+          ),
           toolbarHeight: 30,
           elevation: 1,
           backgroundColor: Colors.deepOrange,
