@@ -434,7 +434,7 @@ class _PartyboxState extends State<Partybox> {
       });
   Widget completedicon() => Container(
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 184, 181, 180),
+          color: const Color.fromARGB(209, 65, 204, 206),
           borderRadius: BorderRadius.circular(6),
           boxShadow: const [
             BoxShadow(
@@ -449,7 +449,7 @@ class _PartyboxState extends State<Partybox> {
         width: MediaQuery.of(context).size.width * 0.12,
         child: const Center(
             child: TextBcolorwidget(
-          name: ' ปาร์ตี้ครบ ',
+          name: ' เสร็จ ',
           size: 10,
           color: Colors.white,
         )),

@@ -86,7 +86,9 @@ class _PartydetailwidgetState extends State<Partydetailwidget> {
           actions: [
             Center(
                 child: widget.completed
-                    ? completebutton(context)
+                    ? widget.createdby == widget.userID
+                        ? completebutton(context)
+                        : const SizedBox()
                     : widget.createdby == widget.userID
                         ? const SizedBox()
                         : joinbutton(widget.docID))
