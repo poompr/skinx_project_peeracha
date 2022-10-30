@@ -1,10 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skinxproject/test/model.dart';
 
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
 import '../constans/text.dart';
+import '../test/bloc/app_blocs.dart';
+import '../test/bloc/app_events.dart';
+import '../test/bloc/app_states.dart';
 import '../widgets/partybox_widget.dart';
 import '../widgets/partyboxlist_widget.dart';
 import '../widgets/tapuserlist_widget.dart';
@@ -26,8 +31,87 @@ class _ProfilescreenState extends State<Profilescreen>
   int editphonenumber = 0;
   final CollectionReference _updateprofileCollection =
       FirebaseFirestore.instance.collection('user');
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  void _delete(context, id) async {
+    BlocProvider.of<ProductBloc>(context).add(Delete(id));
+  }
+
+  Future<void> _create() async {
+    await showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext ctx) {
+          return Padding(
+            padding: EdgeInsets.only(
+                top: 20,
+                left: 20,
+                right: 20,
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(labelText: 'Name'),
+                ),
+                TextField(
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  controller: _priceController,
+                  decoration: const InputDecoration(
+                    labelText: 'Price',
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                  child: const Text('Create'),
+                  onPressed: () async {
+                    final String name = _nameController.text;
+                    final double? price =
+                        double.tryParse(_priceController.text);
+                    if (price != null) {
+                      _postData(context);
+
+                      _nameController.text = '';
+                      _priceController.text = '';
+                      Navigator.of(context).pop();
+                    }
+                  },
+                )
+              ],
+            ),
+          );
+        });
+  }
+
+  void _postData(context) {
+    BlocProvider.of<ProductBloc>(context).add(
+      Create(_nameController.text, _priceController.text),
+    );
+  }
+
+  void _editData(context, id) async {
+    BlocProvider.of<ProductBloc>(context).add(
+      Edit(editname, editprice, id),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<ProductBloc>(context).add(GetData());
+  }
+
+  int testint = 0;
+  String editname = '';
+  String editprice = '';
   @override
   Widget build(BuildContext context) {
+    print('rebuidprofile screen');
     super.build(context);
     return StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -62,6 +146,184 @@ class _ProfilescreenState extends State<Profilescreen>
                 },
                 body: Column(
                   children: [
+                    Text(testint.toString()),
+                    // IconButton(
+                    //     onPressed: () => _delete(),
+                    // {
+                    // _delete();
+                    // setState(() {
+                    //   testint++;
+                    // });
+                    // },
+                    // icon: const Icon(Icons.delete)),
+                    BlocBuilder<ProductBloc, ProductState>(
+                      builder: (context, state) {
+                        print('rebuildbloc');
+                        return BlocBuilder<ProductBloc, ProductState>(
+                          // buildWhen: (previous, current) {
+                          //   return Container();
+                          // },
+                          builder: (context, state) {
+                            if (state is ProductAdding) {
+                              return const AlertDialog(
+                                content: SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            } else if (state is ProductLoaded) {
+                              List<ProductModel> data = state.mydata;
+                              return ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: data.length,
+                                  itemBuilder: (_, index) {
+                                    print(data[index].name);
+
+                                    return Card(
+                                      child: ListTile(
+                                        title: Text(data[index].name),
+                                        trailing: Text(data[index].price),
+                                        onTap: () {
+                                          showModalBottomSheet(
+                                              isScrollControlled: true,
+                                              context: context,
+                                              builder: (BuildContext ctx) {
+                                                return Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 20,
+                                                      left: 20,
+                                                      right: 20,
+                                                      bottom: MediaQuery.of(ctx)
+                                                              .viewInsets
+                                                              .bottom +
+                                                          20),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      TextFormField(
+                                                        initialValue:
+                                                            data[index].name,
+                                                        onChanged: (edittext) {
+                                                          editname = edittext;
+                                                        },
+                                                        decoration:
+                                                            const InputDecoration(
+                                                                labelText:
+                                                                    'Name'),
+                                                      ),
+                                                      TextFormField(
+                                                        initialValue:
+                                                            data[index].price,
+                                                        keyboardType:
+                                                            const TextInputType
+                                                                    .numberWithOptions(
+                                                                decimal: true),
+                                                        onChanged:
+                                                            (editprice1) {
+                                                          editprice =
+                                                              editprice1;
+                                                        },
+                                                        decoration:
+                                                            const InputDecoration(
+                                                          labelText: 'Price',
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          ElevatedButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                _delete(
+                                                                    context,
+                                                                    data[index]
+                                                                        .id);
+                                                                Navigator.pop(
+                                                                    context);
+                                                              }
+                                                              // => BlocProvider
+                                                              //         .of<ProductBloc>(
+                                                              //             context)
+                                                              //     .add(Delete(
+                                                              //         data[index]
+                                                              //             .id))
+                                                              // FirebaseFirestore
+                                                              //     .instance
+                                                              //     .collection(
+                                                              //         'products')
+                                                              //     .doc(data[
+                                                              //             index]
+                                                              //         .id)
+                                                              //     .delete();
+                                                              //   Navigator.pop(
+                                                              //       context);
+                                                              // },
+                                                              ,
+                                                              child: const Text(
+                                                                  'delete')),
+                                                          ElevatedButton(
+                                                            child: const Text(
+                                                                'Edit'),
+                                                            onPressed:
+                                                                () async {
+                                                              final double?
+                                                                  price =
+                                                                  double.tryParse(
+                                                                      editprice);
+                                                              if (price !=
+                                                                      null &&
+                                                                  editname !=
+                                                                      '') {
+                                                                _editData(
+                                                                    context,
+                                                                    data[index]
+                                                                        .id);
+
+                                                                editname = '';
+                                                                editprice = '';
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              }
+                                                            },
+                                                          ),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                );
+                                              });
+                                        },
+                                      ),
+                                    );
+                                  });
+                            } else if (state is ProductLoading) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (state is ProductError) {
+                              return const Center(child: Text("Error"));
+                            } else {
+                              return const Profilescreen();
+                            }
+                          },
+                        );
+                      },
+                    ),
+                    IconButton(
+                        onPressed: () => _create(),
+                        icon: const Icon(Icons.add)),
                     Padding(
                       padding: const EdgeInsets.only(top: 5),
                       child: TabBar(

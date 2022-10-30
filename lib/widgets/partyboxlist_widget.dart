@@ -107,6 +107,7 @@ class _PartyboxlistwidgetState extends State<Partyboxlistwidget> {
               int editdetailtime = snapshot.data!.docs[index]['editdated'];
               bool completed = snapshot.data!.docs[index]['completed'];
               String category = snapshot.data!.docs[index]['category'];
+              print('read doc : ' + docID);
               return Partybox(
                 docID: docID,
                 title: title,

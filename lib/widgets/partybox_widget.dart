@@ -387,22 +387,25 @@ class _PartyboxState extends State<Partybox> {
                 itemBuilder: (context, index, realIndex) {
                   return SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      child: Stack(fit: StackFit.expand, children: [
-                        ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              snapshot.data!.docs[index]['url'],
-                              fit: BoxFit.fill,
-                            )),
-                        Positioned(
-                            left: 10,
-                            top: 10,
-                            child: TextBcolorwidget(
-                              name: widget.category,
-                              size: 16,
-                              color: const Color.fromARGB(222, 255, 255, 255),
-                            ))
-                      ]));
+                      child: snapshot.data!.docs.isEmpty == true
+                          ? const Center(child: Text('No Photo'))
+                          : Stack(fit: StackFit.expand, children: [
+                              ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    snapshot.data!.docs[index]['url'],
+                                    fit: BoxFit.fill,
+                                  )),
+                              Positioned(
+                                  left: 10,
+                                  top: 10,
+                                  child: TextBcolorwidget(
+                                    name: widget.category,
+                                    size: 16,
+                                    color: const Color.fromARGB(
+                                        222, 255, 255, 255),
+                                  ))
+                            ]));
                 },
                 options: CarouselOptions(
                   height: MediaQuery.of(context).size.height * 0.22,
@@ -418,7 +421,7 @@ class _PartyboxState extends State<Partybox> {
               height: 5,
             ),
             snapshot.data!.docs.isEmpty == true
-                ? const Center(child: Text('No Photo'))
+                ? const SizedBox()
                 : AnimatedSmoothIndicator(
                     activeIndex: picIndex,
                     count: snapshot.data!.docs.length,

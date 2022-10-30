@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -9,6 +10,9 @@ import 'package:provider/provider.dart';
 
 import 'constans/text.dart';
 import 'screens/center.dart';
+import 'test/bloc/app_blocs.dart';
+import 'test/bloc/app_states.dart';
+import 'test/productrepo.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,17 +28,64 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => GoogleSignInProvider(),
-      child: MaterialApp(
-        navigatorKey: navigatorKey,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          backgroundColor: Colors.white,
-          primarySwatch: Colors.deepOrange,
-        ),
-        home: const MyHomePage(),
-      ),
-    );
+        create: (context) => GoogleSignInProvider(),
+        child: MaterialApp(
+          navigatorKey: navigatorKey,
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            backgroundColor: Colors.white,
+            primarySwatch: Colors.deepOrange,
+          ),
+          home: RepositoryProvider(
+            create: (context) => ProductRepository(),
+            child: const Home(),
+          ),
+        ));
+  }
+}
+
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+
+    return BlocProvider(
+            create: (context) => ProductBloc(
+                productRepository:
+                    RepositoryProvider.of<ProductRepository>(context)),
+            child:
+                //     BlocListener<ProductBloc, ProductState>(listener: (context, state) {
+                //   if (state is ProductAdded) {
+                //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                //       content: Text("Product added"),
+                //       duration: Duration(seconds: 2),
+                //     ));
+                //   }
+                // },
+                //  child:
+                //     BlocBuilder<ProductBloc, ProductState>(
+                //   builder: (context, state) {
+                //     if (state is ProductAdding) {
+                //       return const AlertDialog(
+                //         content: SizedBox(
+                //           height: 100,
+                //           width: 100,
+                //           child: Center(
+                //             child: CircularProgressIndicator(),
+                //           ),
+                //         ),
+                //       );
+                //     } else if (state is ProductError) {
+                //       return const Center(child: Text("Error"));
+                //     }
+                //     return const MyHomePage();
+                //   },
+                // )
+                MyHomePage())
+        // )
+        ;
   }
 }
 

@@ -30,6 +30,7 @@ class _CenterscreenState extends State<Centerscreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('rebuildcenter');
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('user')

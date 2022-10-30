@@ -17,6 +17,7 @@ class _PartylistscreenState extends State<Partylistscreen>
   String userID = FirebaseAuth.instance.currentUser!.uid;
   @override
   Widget build(BuildContext context) {
+    print('rebuildpartylist');
     super.build(context);
     return Partyboxlistwidget(
       userID: userID,

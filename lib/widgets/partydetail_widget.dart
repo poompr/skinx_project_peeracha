@@ -84,14 +84,16 @@ class _PartydetailwidgetState extends State<Partydetailwidget> {
           elevation: 1.5,
           title: const TextBwidget(name: ' ปาร์ตี้ ', size: 16),
           actions: [
-            Center(
-                child: widget.completed
-                    ? widget.createdby == widget.userID
-                        ? completebutton(context)
-                        : const SizedBox()
-                    : widget.createdby == widget.userID
-                        ? const SizedBox()
-                        : joinbutton(widget.docID))
+            widget.donedate >= DateTime.now().millisecondsSinceEpoch
+                ? Center(
+                    child: widget.completed
+                        ? widget.createdby == widget.userID
+                            ? completebutton(context)
+                            : const SizedBox()
+                        : widget.createdby == widget.userID
+                            ? const SizedBox()
+                            : joinbutton(widget.docID))
+                : const SizedBox()
           ],
         ),
         body: Column(children: [
@@ -111,22 +113,21 @@ class _PartydetailwidgetState extends State<Partydetailwidget> {
                   )
                 ],
               ),
-              if (widget.numcomment >= 1)
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    TextBwidget(
-                        // ignore: prefer_interpolation_to_compose_strings
-                        name: ' ' +
-                            widget.numcomment.toString() +
-                            ' แสดงความคิดเห็น ',
-                        size: 10),
-                    commentbox(),
-                  ],
-                )
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  TextBwidget(
+                      // ignore: prefer_interpolation_to_compose_strings
+                      name: ' ' +
+                          widget.numcomment.toString() +
+                          ' แสดงความคิดเห็น ',
+                      size: 10),
+                  commentbox(),
+                ],
+              )
             ]),
           ),
           Padding(
@@ -232,6 +233,10 @@ class _PartydetailwidgetState extends State<Partydetailwidget> {
         if (!snapshot.hasData) {
           return const Center(
             child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.data == null) {
+          return const Center(
+            child: Text('no data'),
           );
         }
         return Container(
@@ -343,9 +348,12 @@ class _PartydetailwidgetState extends State<Partydetailwidget> {
                                               children: [
                                                 GestureDetector(
                                                   onTap: () {
-                                                    snapshot1.data!.docs.first
-                                                        .reference
-                                                        .delete();
+                                                    print(
+                                                        'delete wrong collection');
+                                                    //wrong
+                                                    // snapshot1.data!.docs.first
+                                                    //     .reference
+                                                    //     .delete();
                                                   },
                                                   child: const TextBwidget(
                                                       name:
