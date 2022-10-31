@@ -156,170 +156,173 @@ class _ProfilescreenState extends State<Profilescreen>
                     // });
                     // },
                     // icon: const Icon(Icons.delete)),
-                    BlocBuilder<ProductBloc, ProductState>(
-                      builder: (context, state) {
-                        print('rebuildbloc');
-                        return BlocBuilder<ProductBloc, ProductState>(
-                          // buildWhen: (previous, current) {
-                          //   return Container();
-                          // },
-                          builder: (context, state) {
-                            if (state is ProductAdding) {
-                              return const AlertDialog(
-                                content: SizedBox(
-                                  height: 100,
-                                  width: 100,
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      color: Colors.green,
-                                    ),
+                    BlocListener<ProductBloc, ProductState>(
+                      listener: (context, state) {
+                        if (state is ProductAdded) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Product added"),
+                            duration: Duration(seconds: 2),
+                          ));
+                        }
+                      },
+                      child: BlocBuilder<ProductBloc, ProductState>(
+                        // buildWhen: (previous, current) {
+                        //   return Container();
+                        // },
+
+                        builder: (context, state) {
+                          print('rebuildbloc');
+                          if (state is ProductAdding) {
+                            return const AlertDialog(
+                              content: SizedBox(
+                                height: 100,
+                                width: 100,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.green,
                                   ),
                                 ),
-                              );
-                            } else if (state is ProductLoaded) {
-                              List<ProductModel> data = state.mydata;
-                              return ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: data.length,
-                                  itemBuilder: (_, index) {
-                                    print(data[index].name);
+                              ),
+                            );
+                          } else if (state is ProductLoaded) {
+                            List<ProductModel> data = state.mydata;
+                            return ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: data.length,
+                                itemBuilder: (_, index) {
+                                  print(data[index].name);
 
-                                    return Card(
-                                      child: ListTile(
-                                        title: Text(data[index].name),
-                                        trailing: Text(data[index].price),
-                                        onTap: () {
-                                          showModalBottomSheet(
-                                              isScrollControlled: true,
-                                              context: context,
-                                              builder: (BuildContext ctx) {
-                                                return Padding(
-                                                  padding: EdgeInsets.only(
-                                                      top: 20,
-                                                      left: 20,
-                                                      right: 20,
-                                                      bottom: MediaQuery.of(ctx)
-                                                              .viewInsets
-                                                              .bottom +
-                                                          20),
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      TextFormField(
-                                                        initialValue:
-                                                            data[index].name,
-                                                        onChanged: (edittext) {
-                                                          editname = edittext;
-                                                        },
-                                                        decoration:
-                                                            const InputDecoration(
-                                                                labelText:
-                                                                    'Name'),
+                                  return Card(
+                                    child: ListTile(
+                                      title: Text(data[index].name),
+                                      trailing: Text(data[index].price),
+                                      onTap: () {
+                                        showModalBottomSheet(
+                                            isScrollControlled: true,
+                                            context: context,
+                                            builder: (BuildContext ctx) {
+                                              return Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: 20,
+                                                    left: 20,
+                                                    right: 20,
+                                                    bottom: MediaQuery.of(ctx)
+                                                            .viewInsets
+                                                            .bottom +
+                                                        20),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    TextFormField(
+                                                      initialValue:
+                                                          data[index].name,
+                                                      onChanged: (edittext) {
+                                                        editname = edittext;
+                                                      },
+                                                      decoration:
+                                                          const InputDecoration(
+                                                              labelText:
+                                                                  'Name'),
+                                                    ),
+                                                    TextFormField(
+                                                      initialValue:
+                                                          data[index].price,
+                                                      keyboardType:
+                                                          const TextInputType
+                                                                  .numberWithOptions(
+                                                              decimal: true),
+                                                      onChanged: (editprice1) {
+                                                        editprice = editprice1;
+                                                      },
+                                                      decoration:
+                                                          const InputDecoration(
+                                                        labelText: 'Price',
                                                       ),
-                                                      TextFormField(
-                                                        initialValue:
-                                                            data[index].price,
-                                                        keyboardType:
-                                                            const TextInputType
-                                                                    .numberWithOptions(
-                                                                decimal: true),
-                                                        onChanged:
-                                                            (editprice1) {
-                                                          editprice =
-                                                              editprice1;
-                                                        },
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          labelText: 'Price',
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          ElevatedButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                _delete(
-                                                                    context,
-                                                                    data[index]
-                                                                        .id);
-                                                                Navigator.pop(
-                                                                    context);
-                                                              }
-                                                              // => BlocProvider
-                                                              //         .of<ProductBloc>(
-                                                              //             context)
-                                                              //     .add(Delete(
-                                                              //         data[index]
-                                                              //             .id))
-                                                              // FirebaseFirestore
-                                                              //     .instance
-                                                              //     .collection(
-                                                              //         'products')
-                                                              //     .doc(data[
-                                                              //             index]
-                                                              //         .id)
-                                                              //     .delete();
-                                                              //   Navigator.pop(
-                                                              //       context);
-                                                              // },
-                                                              ,
-                                                              child: const Text(
-                                                                  'delete')),
-                                                          ElevatedButton(
-                                                            child: const Text(
-                                                                'Edit'),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        ElevatedButton(
                                                             onPressed:
                                                                 () async {
-                                                              final double?
-                                                                  price =
-                                                                  double.tryParse(
-                                                                      editprice);
-                                                              if (price !=
-                                                                      null &&
-                                                                  editname !=
-                                                                      '') {
-                                                                _editData(
-                                                                    context,
-                                                                    data[index]
-                                                                        .id);
+                                                              _delete(
+                                                                  context,
+                                                                  data[index]
+                                                                      .id);
+                                                              Navigator.pop(
+                                                                  context);
+                                                            }
+                                                            // => BlocProvider
+                                                            //         .of<ProductBloc>(
+                                                            //             context)
+                                                            //     .add(Delete(
+                                                            //         data[index]
+                                                            //             .id))
+                                                            // FirebaseFirestore
+                                                            //     .instance
+                                                            //     .collection(
+                                                            //         'products')
+                                                            //     .doc(data[
+                                                            //             index]
+                                                            //         .id)
+                                                            //     .delete();
+                                                            //   Navigator.pop(
+                                                            //       context);
+                                                            // },
+                                                            ,
+                                                            child: const Text(
+                                                                'delete')),
+                                                        ElevatedButton(
+                                                          child: const Text(
+                                                              'Edit'),
+                                                          onPressed: () async {
+                                                            final double?
+                                                                price =
+                                                                double.tryParse(
+                                                                    editprice);
+                                                            if (price != null &&
+                                                                editname !=
+                                                                    '') {
+                                                              _editData(
+                                                                  context,
+                                                                  data[index]
+                                                                      .id);
 
-                                                                editname = '';
-                                                                editprice = '';
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              }
-                                                            },
-                                                          ),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                );
-                                              });
-                                        },
-                                      ),
-                                    );
-                                  });
-                            } else if (state is ProductLoading) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            } else if (state is ProductError) {
-                              return const Center(child: Text("Error"));
-                            } else {
-                              return const Profilescreen();
-                            }
-                          },
-                        );
-                      },
+                                                              editname = '';
+                                                              editprice = '';
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            }
+                                                          },
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              );
+                                            });
+                                      },
+                                    ),
+                                  );
+                                });
+                          } else if (state is ProductLoading) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (state is ProductError) {
+                            return const Center(child: Text("Error"));
+                          } else {
+                            return const Profilescreen();
+                          }
+                        },
+                      ),
                     ),
                     IconButton(
                         onPressed: () => _create(),

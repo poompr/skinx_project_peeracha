@@ -448,13 +448,15 @@ class _AddpartywidgetState extends State<Addpartywidget> {
   chooseBriefImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     setState(() {
-      if (_briefimage.length < 5) {
+      // ignore: unnecessary_null_comparison
+      if (_briefimage.length < 5 && _briefimage.isNotEmpty) {
         _briefimage.add(File(pickedFile!.path));
         // ignore: avoid_print
         print(_briefimage.length);
       }
     });
-    if (pickedFile?.path == null) return retrieveLostData();
+    // error when cancel on ios system//
+    // if (pickedFile?.path == null) return retrieveLostData();
   }
 
   Future uploadbriefFile(docIdIndex) async {

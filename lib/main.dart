@@ -9,9 +9,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 import 'constans/text.dart';
+import 'partyboxbloctest.dart/bloc/partybox_blocs.dart';
 import 'screens/center.dart';
 import 'test/bloc/app_blocs.dart';
-import 'test/bloc/app_states.dart';
 import 'test/productrepo.dart';
 
 Future main() async {
@@ -33,8 +33,23 @@ class MyApp extends StatelessWidget {
           navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
+            appBarTheme: const AppBarTheme(
+              color: Colors.deepOrange,
+            ),
+            textSelectionTheme: const TextSelectionThemeData(
+              selectionColor: Colors.grey,
+              cursorColor: Color(0xff171d49),
+              selectionHandleColor: Color.fromARGB(255, 203, 65, 35),
+            ),
             backgroundColor: Colors.white,
-            primarySwatch: Colors.deepOrange,
+            brightness: Brightness.light,
+            highlightColor: Colors.white,
+            floatingActionButtonTheme: const FloatingActionButtonThemeData(
+                backgroundColor: Colors.blue,
+                focusColor: Colors.blueAccent,
+                splashColor: Colors.lightBlue),
+            colorScheme:
+                ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
           ),
           home: RepositoryProvider(
             create: (context) => ProductRepository(),
@@ -51,10 +66,17 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     // GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
-    return BlocProvider(
-            create: (context) => ProductBloc(
-                productRepository:
-                    RepositoryProvider.of<ProductRepository>(context)),
+    return MultiBlocProvider(
+            providers: [
+          BlocProvider(
+              create: (context) => ProductBloc(
+                  productRepository:
+                      RepositoryProvider.of<ProductRepository>(context))),
+          BlocProvider(
+              create: (context) => PartyboxBloc(
+                  productRepository:
+                      RepositoryProvider.of<ProductRepository>(context)))
+        ],
             child:
                 //     BlocListener<ProductBloc, ProductState>(listener: (context, state) {
                 //   if (state is ProductAdded) {
@@ -83,7 +105,7 @@ class Home extends StatelessWidget {
                 //     return const MyHomePage();
                 //   },
                 // )
-                MyHomePage())
+                const MyHomePage())
         // )
         ;
   }

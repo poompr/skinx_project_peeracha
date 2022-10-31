@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:skinxproject/partyboxbloctest.dart/partybox_model.dart';
-import 'package:skinxproject/test/model.dart';
 
-class ProductRepository {
-  final _fireCloud = FirebaseFirestore.instance.collection("products");
+import 'partybox_model.dart';
+
+class PartyboxRepository {
+  final _fireCloud = FirebaseFirestore.instance.collection("partyboxs");
 
   Future<void> create({required String name, required String price}) async {
     try {
@@ -19,13 +19,14 @@ class ProductRepository {
     }
   }
 
-  Future<List<ProductModel>> get() async {
-    List<ProductModel> proList = [];
+  Future<List<PartyboxModel>> get() async {
+    List<PartyboxModel> proList = [];
     try {
-      final pro = await FirebaseFirestore.instance.collection('products').get();
+      final pro =
+          await FirebaseFirestore.instance.collection('Partyboxs').get();
       // ignore: avoid_function_literals_in_foreach_calls
       pro.docs.forEach((element) {
-        return proList.add(ProductModel.fromJson(element.data()));
+        return proList.add(PartyboxModel.fromJson(element.data()));
       });
       return proList;
     } on FirebaseException catch (e) {
@@ -39,7 +40,7 @@ class ProductRepository {
   }
 
   Future<void> delete(id) async {
-    var fire = FirebaseFirestore.instance.collection("products").doc(id);
+    var fire = FirebaseFirestore.instance.collection("artyboxs").doc(id);
     // var snapshots = await fire.get();
     // for (var doc in snapshots.docs) {
     //   await doc.reference.delete();
@@ -54,25 +55,6 @@ class ProductRepository {
       if (kDebugMode) {
         print("Failed with error '${e.code}': ${e.message}");
       }
-    } catch (e) {
-      throw Exception(e.toString());
-    }
-  }
-
-  Future<List<PartyboxModel>> getParty() async {
-    List<PartyboxModel> proList = [];
-    try {
-      final pro = await FirebaseFirestore.instance.collection('party').get();
-      // ignore: avoid_function_literals_in_foreach_calls
-      pro.docs.forEach((element) {
-        return proList.add(PartyboxModel.fromJson(element.data()));
-      });
-      return proList;
-    } on FirebaseException catch (e) {
-      if (kDebugMode) {
-        print("Failed with error '${e.code}':${e.message}");
-      }
-      return proList;
     } catch (e) {
       throw Exception(e.toString());
     }

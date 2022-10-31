@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:skinxproject/screens/test1_screen.dart';
 
 import '../constans/text.dart';
 
@@ -84,7 +85,7 @@ class _MainState extends State<Main> {
 
   int _selectedIndex = 0;
   void _navigateBottomNavBar(int index) {
-    if (index == 1) {
+    if (index == 2) {
       showBottomSheet();
       return;
     }
@@ -96,6 +97,8 @@ class _MainState extends State<Main> {
 
   final List<Widget> _bodychildren = [
     const Partylistscreen(),
+    const Test1screen(),
+    Container(),
     Container(),
     const Profilescreen()
   ];
@@ -170,6 +173,8 @@ class _MainState extends State<Main> {
           BottomNavigationBarItem(
               icon: Icon(Icons.cottage_rounded), label: ' ปาร์ตี้ '),
           BottomNavigationBarItem(
+              icon: Icon(Icons.cottage_rounded), label: ' test'),
+          BottomNavigationBarItem(
               icon: CircleAvatar(
                   radius: 16,
                   backgroundColor: Colors.deepOrange,
@@ -179,6 +184,8 @@ class _MainState extends State<Main> {
                     child: Icon(Icons.add, color: Colors.deepOrange),
                   )),
               label: ' '),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.cottage_rounded), label: ' test2 '),
           BottomNavigationBarItem(
               backgroundColor: Color.fromARGB(154, 255, 86, 34),
               icon: Icon(Icons.person_pin),
